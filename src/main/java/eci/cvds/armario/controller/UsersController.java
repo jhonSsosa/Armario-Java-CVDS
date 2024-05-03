@@ -21,6 +21,11 @@ public class UsersController {
     public List<User> getAllUsers(){
         return this.userService.getAllUsers();
     }
+    @GetMapping("/user/{username}")
+    public User getUser(@PathVariable("username") String username){
+        return this.userService.getUserByUsername(username);
+    }
+
     @PutMapping("/checkearUsuario/{username}/{password}")
     public boolean validarUsuario(@PathVariable String username, @PathVariable String password, @RequestBody User user){
         return this.userService.validarUsuario(username, password);

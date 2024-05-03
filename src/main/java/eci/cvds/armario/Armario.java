@@ -4,9 +4,6 @@ import eci.cvds.armario.controller.UsersController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
-
 
 @SpringBootApplication
 public class Armario
@@ -20,5 +17,4 @@ public class Armario
     {
         SpringApplication.run(Armario.class, args);
     }
-
 }

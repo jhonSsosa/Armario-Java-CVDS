@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,8 +15,10 @@ public class UserService {
         this.userRepository = userRepository;
     }
     public boolean validarUsuario(String username, String password){
-        Optional<User> user = userRepository.findByUsername(username);
-        return user.get().getUsername().equals(username) && user.get().getPassword().equals(password);
+        User user = userRepository.findByUsername(username);
+        return user.getUsername().equals(username) && user.getPassword().equals(password);
     }
+    public User getUserByUsername(String username){return userRepository.findByUsername(username);}
+
     public List<User> getAllUsers() {return userRepository.findAll();}
 }
