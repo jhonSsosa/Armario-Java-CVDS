@@ -26,8 +26,8 @@ public class UsersController {
         return this.userService.getUserByUsername(username);
     }
 
-    @PutMapping("/checkearUsuario/{username}/{password}")
-    public boolean validarUsuario(@PathVariable String username, @PathVariable String password, @RequestBody User user){
-        return this.userService.validarUsuario(username, password);
+    @PostMapping("/chequearUsuario")
+    public boolean validarUsuario(@RequestBody User user){
+        return this.userService.validarUsuario(user);
     }
 }

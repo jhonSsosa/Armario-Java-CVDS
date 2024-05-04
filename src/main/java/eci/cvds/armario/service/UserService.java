@@ -14,9 +14,15 @@ public class UserService {
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
-    public boolean validarUsuario(String username, String password){
-        User user = userRepository.findByUsername(username);
-        return user.getUsername().equals(username) && user.getPassword().equals(password);
+    public boolean validarUsuario(User LogInUser){
+        User user = null;
+        if(userRepository.findByUsername(LogInUser.getUsername()) == null){
+            return false;
+        }else{
+            user = userRepository.findByUsername(LogInUser.getUsername());
+        }
+        return user.getUsername().equals(LogInUser.getUsername()) &&
+                user.getPassword().equals(LogInUser.getPassword());
     }
     public User getUserByUsername(String username){return userRepository.findByUsername(username);}
 
