@@ -14,6 +14,7 @@ public class UserService {
     public UserService(UserRepository userRepository){
         this.userRepository = userRepository;
     }
+    public void adicionar(User user){userRepository.save(user);}
     public boolean validarUsuario(User LogInUser){
         User user = null;
         if(userRepository.findByUsername(LogInUser.getUsername()) == null){
@@ -27,4 +28,6 @@ public class UserService {
     public User getUserByUsername(String username){return userRepository.findByUsername(username);}
 
     public List<User> getAllUsers() {return userRepository.findAll();}
+
+    public void eliminarUsuario(String id){userRepository.deleteById(id);}
 }
