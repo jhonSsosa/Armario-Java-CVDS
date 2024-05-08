@@ -1,13 +1,11 @@
 package eci.cvds.armario.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Getter
@@ -17,7 +15,9 @@ import lombok.Setter;
 @Table(name = "USERS")
 public class User {
     @Id
-    @Column(name = "USER_ID", unique = true)
+    @Column(name = "USER_ID")
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String userId;
 
     @Column(name = "Username")
