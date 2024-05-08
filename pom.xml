@@ -68,14 +68,14 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <version>3.2.5</version>
-        <!-- Rationale: https://stackoverflow.com/questions/57188141/why-is-spring-devtools-not-working-when-i-change-my-static-files-and-reload-the -->
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.13.0</version>
-
         <configuration>
           <addResources>true</addResources>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
       </plugin>
     </plugins>
   </build>
