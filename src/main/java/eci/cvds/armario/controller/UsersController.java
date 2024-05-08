@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping(value = "/LogIn")
+@RequestMapping(value = "/")
 public class UsersController {
     private UserService userService;
     @Autowired
@@ -25,9 +25,13 @@ public class UsersController {
     public User getUser(@PathVariable("username") String username){
         return this.userService.getUserByUsername(username);
     }
-
+    @PostMapping("/adicionarUsuario")
+    public void adicionar(@RequestBody User user){userService.adicionar(user);}
     @PostMapping("/chequearUsuario")
     public boolean validarUsuario(@RequestBody User user){
         return this.userService.validarUsuario(user);
     }
+
+    @DeleteMapping("/eliminarUsuario")
+    public void eliminarUsuario(@PathVariable String id){userService.eliminarUsuario(id);}
 }
