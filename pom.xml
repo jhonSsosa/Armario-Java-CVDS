@@ -67,6 +67,7 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>3.2.5</version>
         <!-- Rationale: https://stackoverflow.com/questions/57188141/why-is-spring-devtools-not-working-when-i-change-my-static-files-and-reload-the -->
         <configuration>
           <addResources>true</addResources>
