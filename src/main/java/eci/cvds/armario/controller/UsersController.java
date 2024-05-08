@@ -16,7 +16,10 @@ public class UsersController {
     public UsersController(UserService userService){
         this.userService = userService;
     }
-
+    @GetMapping("/user")
+    public String greeting(){
+        return "greeting";
+    }
     @GetMapping("/users")
     public List<User> getAllUsers(){
         return this.userService.getAllUsers();
@@ -31,7 +34,6 @@ public class UsersController {
     public boolean validarUsuario(@RequestBody User user){
         return this.userService.validarUsuario(user);
     }
-
     @DeleteMapping("/eliminarUsuario")
     public void eliminarUsuario(@PathVariable String id){userService.eliminarUsuario(id);}
 }
