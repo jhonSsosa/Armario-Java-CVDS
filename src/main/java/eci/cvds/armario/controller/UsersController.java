@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://localhost:3000/*", "https://witty-field-0ab72731e.5.azurestaticapps.net/*"})
 @RequestMapping(value = "/")
 public class UsersController {
     private UserService userService;

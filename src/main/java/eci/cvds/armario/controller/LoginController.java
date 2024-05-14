@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@CrossOrigin("*")
+@CrossOrigin(origins = {"http://localhost:3000/*", "https://witty-field-0ab72731e.5.azurestaticapps.net/*"})
 @RestController
 @RequestMapping(value = "/login")
 public class LoginController {
@@ -24,15 +24,15 @@ public class LoginController {
         this.userService = userService; this.sessionRepository = sessionRepository;}
 
     @PostMapping("")
-    public boolean loginSubmit(@RequestBody User userSend) {
+    public UUID loginSubmit(@RequestBody User userSend) {
         if (!userService.validarUsuario(userSend)) {
-            return false;
+            return null;
         } else {
             User user = userService.getUserByUsername(userSend.getUsername());
             Session session = new Session(UUID.randomUUID(), user);
             sessionRepository.save(session);
             // create and add a cookie to the response
-            return true;
+            return session.getToken();
         }
     }
 
