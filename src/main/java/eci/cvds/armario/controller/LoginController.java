@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@CrossOrigin(origins = {"http://localhost:3000/*", "https://witty-field-0ab72731e.5.azurestaticapps.net/*"})
+@CrossOrigin(origins = {"http://localhost:3000", "https://witty-field-0ab72731e.5.azurestaticapps.net"})
 @RestController
 @RequestMapping(value = "/login")
 public class LoginController {
