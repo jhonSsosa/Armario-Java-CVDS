@@ -26,6 +26,8 @@ public class UserService {
                 user.getPassword().equals(LogInUser.getPassword());
     }
     public User getUserByUsername(String username){return userRepository.findByUsername(username);}
+    public User getUserById(String id){return userRepository.getReferenceById(id);}
+
 
     public List<User> getAllUsers() {return userRepository.findAll();}
 
