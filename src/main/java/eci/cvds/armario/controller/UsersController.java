@@ -20,7 +20,7 @@ public class UsersController {
     public UsersController(UserService userService, SessionRepository sessionRepository){
         this.userService = userService;  this.sessionRepository = sessionRepository;;}
 
-    @GetMapping("/")
+    @GetMapping("")
     public String greeting(){
         return "greeting";
     }
