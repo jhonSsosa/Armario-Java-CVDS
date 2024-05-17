@@ -24,12 +24,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         this.sessionRepository = sessionRepository;
     }
     private String getCookieValue(HttpServletRequest req, String cookieName) {
-        return Arrays.stream(req.getCookies())
+        if (req.getCookies() == null) {
+            return null;
+        }return Arrays.stream(req.getCookies())
                 .filter(c -> c.getName().equals(cookieName))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElse(null);
-    }
+                .orElse(null);}
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -49,11 +50,11 @@ public class AuthInterceptor implements HandlerInterceptor {
                     return true;
                 }
             } else {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Session does not exist in database");
                 return false;
             }
         } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token does not exist in cookies");
             return false;
         }
         return false;
