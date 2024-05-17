@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -31,11 +33,21 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String path = request.getRequestURI();
         String authToken = getCookieValue(request, "authToken");
         if (authToken != null) {
             Session session = sessionRepository.findByToken(UUID.fromString(authToken));
             if (session != null) {
-                return true;
+                Duration duration = Duration.between(Instant.now(), session.getTimestamp());
+                long oneHour = 60L * 60L;
+                if(duration.getSeconds() > oneHour) {
+                    sessionRepository.delete(session);
+                    response.sendError(HttpServletResponse.SC_EXPECTATION_FAILED, "SessionTimeout");
+                    return false;
+                }else if(path.startsWith("/user/userId")){
+                    response.setHeader("Access-Control-Allow-Credentials","true");
+                    return true;
+                }
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad Request");
                 return false;
@@ -44,6 +56,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
             return false;
         }
+        return false;
     }
 
     @Override

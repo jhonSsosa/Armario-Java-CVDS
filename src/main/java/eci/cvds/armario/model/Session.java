@@ -18,6 +18,9 @@ public class Session {
     @Column(name = "token", nullable=false, unique=true)
     private UUID token;
 
+    @Column(name = "timestamp", nullable = false)
+    private Instant timestamp;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;

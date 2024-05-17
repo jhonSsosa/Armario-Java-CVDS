@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @CrossOrigin(origins = {"http://localhost:3000", "https://witty-field-0ab72731e.5.azurestaticapps.net"})
@@ -29,7 +30,7 @@ public class LoginController {
             return null;
         } else {
             User user = userService.getUserByUsername(userSend.getUsername());
-            Session session = new Session(UUID.randomUUID(), user);
+            Session session = new Session(UUID.randomUUID(), Instant.now(), user);
             sessionRepository.save(session);
             // create and add a cookie to the response
             return session.getToken();
