@@ -25,7 +25,7 @@ public class LoginController {
         this.userService = userService; this.sessionRepository = sessionRepository;}
 
     @PostMapping("")
-    public UUID loginSubmit(@RequestBody User userSend) {
+    public Session loginSubmit(@RequestBody User userSend) {
         if (!userService.validarUsuario(userSend)) {
             return null;
         } else {
@@ -33,7 +33,7 @@ public class LoginController {
             Session session = new Session(UUID.randomUUID(), Instant.now(), user);
             sessionRepository.save(session);
             // create and add a cookie to the response
-            return session.getToken();
+            return session;
         }
     }
 
