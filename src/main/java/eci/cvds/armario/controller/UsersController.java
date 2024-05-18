@@ -40,7 +40,7 @@ public class UsersController {
     }
 
     @GetMapping("/client/userId")
-    public User getUserByID(@CookieValue("authToken") UUID id) {
+    public User getUserByID(@RequestHeader("authToken") UUID id) {
         User user = this.sessionRepository.getReferenceById(id).getUser();
         return user;
     }
