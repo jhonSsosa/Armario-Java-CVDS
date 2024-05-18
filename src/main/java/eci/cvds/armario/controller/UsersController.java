@@ -16,38 +16,47 @@ import java.util.UUID;
 public class UsersController {
     private UserService userService;
     private SessionRepository sessionRepository;
+
     @Autowired
-    public UsersController(UserService userService, SessionRepository sessionRepository){
-        this.userService = userService;  this.sessionRepository = sessionRepository;;}
+    public UsersController(UserService userService, SessionRepository sessionRepository) {
+        this.userService = userService;
+        this.sessionRepository = sessionRepository;
+        ;
+    }
 
     @GetMapping("")
-    public String greeting(){
+    public String greeting() {
         return "greeting";
     }
 
-    @GetMapping("/users")
-    public List<User> getAllUsers(){
+    @GetMapping("/admin/users")
+    public List<User> getAllUsers() {
         return this.userService.getAllUsers();
     }
 
-    @GetMapping("/username/{id}")
-    public User getUserByUsername(@PathVariable("id") String id){
+    @GetMapping("/admin/username/{id}")
+    public User getUserByUsername(@PathVariable("id") String id) {
         return this.userService.getUserById(id);
     }
 
-    @GetMapping("/userId")
-    public User getUserByID(@CookieValue("authToken") UUID id){
-        User user  = this.sessionRepository.getReferenceById(id).getUser();
+    @GetMapping("/client/userId")
+    public User getUserByID(@CookieValue("authToken") UUID id) {
+        User user = this.sessionRepository.getReferenceById(id).getUser();
         return user;
     }
-    @PostMapping("/adicionarUsuario")
-    public void adicionar(@RequestBody User user){userService.adicionar(user);}
 
-    @PostMapping("/chequearUsuario")
-    public boolean validarUsuario(@RequestBody User user){
+    @PostMapping("/admin/adicionarUsuario")
+    public void adicionar(@RequestBody User user) {
+        userService.adicionar(user);
+    }
+
+    @PostMapping("/admin/chequearUsuario")
+    public boolean validarUsuario(@RequestBody User user) {
         return this.userService.validarUsuario(user);
     }
 
-    @DeleteMapping("/eliminarUsuario")
-    public void eliminarUsuario(@PathVariable String id){userService.eliminarUsuario(id);}
+    @DeleteMapping("/admin/eliminarUsuario/{id}")
+    public void eliminarUsuario(@PathVariable String id) {
+        userService.eliminarUsuario(id);
+    }
 }
