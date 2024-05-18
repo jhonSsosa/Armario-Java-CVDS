@@ -7,6 +7,8 @@ import eci.cvds.armario.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -25,15 +27,15 @@ public class LoginController {
         this.userService = userService; this.sessionRepository = sessionRepository;}
 
     @PostMapping("")
-    public Session loginSubmit(@RequestBody User userSend) {
+    public ResponseEntity<Session> loginSubmit(@RequestBody User userSend) {
         if (!userService.validarUsuario(userSend)) {
-            return null;
+            return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         } else {
             User user = userService.getUserByUsername(userSend.getUsername());
             Session session = new Session(UUID.randomUUID(), Instant.now(), user);
             sessionRepository.save(session);
             // create and add a cookie to the response
-            return session;
+            return new ResponseEntity<>(session, HttpStatus.OK);
         }
     }
 
@@ -50,6 +52,6 @@ public class LoginController {
     @PostMapping("register")
     public String registerSubmit(@RequestBody User userSend){
         userService.adicionar(userSend);
-        return "redirect:/login";
+        return "Usuario creado exitósamente";
     }
 }

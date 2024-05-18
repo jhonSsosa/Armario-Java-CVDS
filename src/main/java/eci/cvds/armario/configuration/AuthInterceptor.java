@@ -55,7 +55,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return false;
             }
         } else {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token does not exist in cookies");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token does not exist in header authToken");
             return false;
         }
     }
