@@ -19,18 +19,22 @@ import java.util.UUID;
 @Component
 public class AuthInterceptor implements HandlerInterceptor {
     private final SessionRepository sessionRepository;
+
     @Autowired
     public AuthInterceptor(SessionRepository sessionRepository) {
         this.sessionRepository = sessionRepository;
     }
+
     private String getCookieValue(HttpServletRequest req, String cookieName) {
         if (req.getCookies() == null) {
             return null;
-        }return Arrays.stream(req.getCookies())
+        }
+        return Arrays.stream(req.getCookies())
                 .filter(c -> c.getName().equals(cookieName))
                 .findFirst()
                 .map(Cookie::getValue)
-                .orElse(null);}
+                .orElse(null);
+    }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -41,13 +45,20 @@ public class AuthInterceptor implements HandlerInterceptor {
             if (session != null) {
                 Duration duration = Duration.between(Instant.now(), session.getTimestamp());
                 long oneHour = 60L * 60L;
-                if(duration.getSeconds() > oneHour) {
+                if (duration.getSeconds() > oneHour) {
                     sessionRepository.delete(session);
                     response.sendError(HttpServletResponse.SC_EXPECTATION_FAILED, "SessionTimeout");
                     return false;
-                }else if(path.startsWith("/user/userId")){
-                    response.setHeader("Access-Control-Allow-Credentials","true");
+                } else if (path.startsWith("/user/users") && session.getUser().getRole().equals(Roles.ADMINISTRADOR)) {
+                    response.setHeader("Access-Control-Allow-Credentials", "true");
                     return true;
+                } else if (path.startsWith("/user/userId") && session.getUser().getRole().equals(Roles.CLIENTE)) {
+                    response.setHeader("Access-Control-Allow-Credentials", "true");
+
+                    return true;
+                } else {
+                    response.sendError(HttpServletResponse.SC_EXPECTATION_FAILED, "Route does not found");
+                    return false;
                 }
             } else {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Session does not exist in database");
@@ -57,7 +68,6 @@ public class AuthInterceptor implements HandlerInterceptor {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token does not exist in cookies");
             return false;
         }
-        return false;
     }
 
     @Override
