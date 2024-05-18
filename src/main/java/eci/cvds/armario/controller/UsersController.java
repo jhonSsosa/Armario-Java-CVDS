@@ -50,6 +50,11 @@ public class UsersController {
         userService.adicionar(user);
     }
 
+    @PostMapping("/admin/actualizarUsuario/{id}")
+    public User actualizar(@PathVariable String id, @RequestBody User user) {
+        return userService.actualizar(id, user);
+    }
+
     @PostMapping("/admin/chequearUsuario")
     public boolean validarUsuario(@RequestBody User user) {
         return this.userService.validarUsuario(user);
