@@ -5,6 +5,7 @@ import eci.cvds.armario.model.User;
 import eci.cvds.armario.repository.SessionRepository;
 import eci.cvds.armario.service.UserService;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,14 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/login")
 public class LoginController {
-    private static final String LOGIN_PAGE = "login/login";
     private final UserService userService;
     private final SessionRepository sessionRepository;
 
     @Autowired
     public LoginController(UserService userService, SessionRepository sessionRepository) {
-        this.userService = userService; this.sessionRepository = sessionRepository;}
+        this.userService = userService;
+        this.sessionRepository = sessionRepository;
+    }
 
     @PostMapping("")
     public ResponseEntity<Session> loginSubmit(@RequestBody User userSend) {
@@ -34,23 +36,24 @@ public class LoginController {
             User user = userService.getUserByUsername(userSend.getUsername());
             Session session = new Session(UUID.randomUUID(), Instant.now(), user);
             sessionRepository.save(session);
-            // create and add a cookie to the response
             return new ResponseEntity<>(session, HttpStatus.OK);
         }
     }
 
     @PostMapping("logout")
-    public String logoutSubmit(HttpServletResponse response) {
-        Cookie cookie = new Cookie("authToken", null);
-        cookie.setMaxAge(0);
-        cookie.setSecure(true);
-        cookie.setHttpOnly(true);
-        cookie.setPath("/");
-        response.addCookie(cookie);
-        return LOGIN_PAGE;
+    public ResponseEntity<String> logoutSubmit(HttpServletRequest request, HttpServletResponse response) {
+        UUID authToken = (!request.getHeader("authToken").isEmpty() ? UUID.fromString(request.getHeader("authToken")) : null);
+        if (authToken == null) {
+            return new ResponseEntity<>("No esta autorizado para cerrar sesion ", HttpStatus.UNAUTHORIZED);
+        } else if (sessionRepository.getReferenceById(authToken) == null) {
+            return new ResponseEntity<>("No se encontro sesion abierta", HttpStatus.NOT_FOUND);
+        }
+        sessionRepository.delete(sessionRepository.getReferenceById(authToken));
+        return new ResponseEntity<>("La sesión se cerro correctamente", HttpStatus.OK);
     }
+
     @PostMapping("register")
-    public String registerSubmit(@RequestBody User userSend){
+    public String registerSubmit(@RequestBody User userSend) {
         userService.adicionar(userSend);
         return "Usuario creado exitósamente";
     }
