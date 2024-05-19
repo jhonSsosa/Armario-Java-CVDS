@@ -45,7 +45,8 @@ public class LoginController {
         UUID authToken = (!request.getHeader("authToken").isEmpty() ? UUID.fromString(request.getHeader("authToken")) : null);
         if (authToken == null) {
             return new ResponseEntity<>("No esta autorizado para cerrar sesion ", HttpStatus.UNAUTHORIZED);
-        } else if (sessionRepository.getReferenceById(authToken) == null) {
+        } 
+        if (sessionRepository.getReferenceById(authToken) == null) {
             return new ResponseEntity<>("No se encontro sesion abierta", HttpStatus.NOT_FOUND);
         }
         sessionRepository.delete(sessionRepository.getReferenceById(authToken));
