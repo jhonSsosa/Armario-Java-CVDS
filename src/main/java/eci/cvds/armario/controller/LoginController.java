@@ -45,12 +45,14 @@ public class LoginController {
         UUID authToken = (!request.getHeader("authToken").isEmpty() ? UUID.fromString(request.getHeader("authToken")) : null);
         if (authToken == null) {
             return new ResponseEntity<>("No esta autorizado para cerrar sesion ", HttpStatus.UNAUTHORIZED);
-        } 
-        if (sessionRepository.getReferenceById(authToken) == null) {
+        }
+        try {
+            Session session = sessionRepository.getReferenceById(authToken);
+            sessionRepository.delete(session);
+            return new ResponseEntity<>("La sesión se cerro correctamente", HttpStatus.OK);
+        }catch (jakarta.persistence.EntityNotFoundException e) {
             return new ResponseEntity<>("No se encontro sesion abierta", HttpStatus.NOT_FOUND);
         }
-        sessionRepository.delete(sessionRepository.getReferenceById(authToken));
-        return new ResponseEntity<>("La sesión se cerro correctamente", HttpStatus.OK);
     }
 
     @PostMapping("register")
