@@ -4,7 +4,6 @@ import eci.cvds.armario.model.Session;
 import eci.cvds.armario.model.User;
 import eci.cvds.armario.repository.SessionRepository;
 import eci.cvds.armario.service.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +58,10 @@ public class LoginController {
     public String registerSubmit(@RequestBody User userSend) {
         userService.adicionar(userSend);
         return "Usuario creado exitósamente";
+    }
+
+    @DeleteMapping("/eliminarSesiones")
+    public void eliminarSesiones(){
+        sessionRepository.deleteAll();
     }
 }

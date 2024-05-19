@@ -1,6 +1,5 @@
 package eci.cvds.armario.controller;
 
-import eci.cvds.armario.model.Session;
 import eci.cvds.armario.model.User;
 import eci.cvds.armario.repository.SessionRepository;
 import eci.cvds.armario.service.UserService;
