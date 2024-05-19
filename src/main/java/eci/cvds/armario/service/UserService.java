@@ -21,17 +21,15 @@ public class UserService {
     }
 
     public boolean validarUsuario(User LogInUser) {
-        User user = null;
         if (userRepository.findByUsername(LogInUser.getUsername()) == null) {
             return false;
-        } else {
-            user = userRepository.findByUsername(LogInUser.getUsername());
         }
+        User user = userRepository.findByUsername(LogInUser.getUsername());
         return user.getUsername().equals(LogInUser.getUsername()) &&
                 user.getPassword().equals(LogInUser.getPassword());
     }
 
-    public User actualizar(String id, User updatedUser){
+    public User actualizar(String id, User updatedUser) {
         User user = userRepository.findById(id).get();
         user.setUserId(updatedUser.getUserId());
         user.setPassword(updatedUser.getPassword());
