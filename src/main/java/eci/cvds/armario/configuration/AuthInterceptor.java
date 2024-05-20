@@ -29,11 +29,11 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("BasicAuthInterceptor::preHandle()");
+        if(request.getMethod().equals("OPTIONS")){
+            return true;
+        }
         String path = request.getRequestURI();
-        log.info(path);
         String authToken = request.getHeader("authToken");
-        log.info(authToken);
-        System.out.println(request.getHeader("Content-Type"));
         if (authToken != null) {
             Session session = sessionRepository.findByToken(UUID.fromString(authToken));
             if (session != null) {
