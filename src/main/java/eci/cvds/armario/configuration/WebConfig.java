@@ -23,18 +23,4 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/login/eliminarSesiones");
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/user/**")
-                .allowedMethods("*")
-                .allowedOrigins("*")
-                .allowedHeaders("*")
-                .exposedHeaders("authToken");
-
-        registry.addMapping("/login/eliminarSesiones")
-                .allowedMethods("*")
-                .allowedOrigins("*")
-                .allowedHeaders("*")
-                .exposedHeaders("authToken");
-    }
 }
