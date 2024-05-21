@@ -24,11 +24,9 @@ public class Prenda {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Enumerate(EnumType.STRING)
     @Column(name = "tipo")
     private TipoPrenda tipo;
 
-    @Enumerate(EnumType.STRING)
     @Column(name = "categoria")
     private CategoriaPrenda categoria;
 
