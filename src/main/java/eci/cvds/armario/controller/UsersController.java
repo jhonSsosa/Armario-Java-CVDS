@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "https://witty-field-0ab72731e.5.azurestaticapps.net"})
 @RequestMapping(value = "/user")
@@ -28,11 +29,20 @@ public class UsersController {
         return "greeting";
     }
 
-    @GetMapping("/admin/users")
+    @PostMapping("/admin/users")
+    public ResponseEntity<?> getAllUsers(@RequestBody User userCredentials) {
+        User user = this.userService.getUserByUsername(userCredentials.getUsername());
+        if (user != null && user.getPassword().equals(userCredentials.getPassword())) {
+            return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Unauthorized", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/client/users")
     public List<User> getAllUsers() {
         return this.userService.getAllUsers();
     }
-
     @GetMapping("/admin/username/{id}")
     public User getUserByUsername(@PathVariable("id") String id) {
         return this.userService.getUserById(id);
@@ -41,6 +51,11 @@ public class UsersController {
     @GetMapping("/client/userId")
     public User getUserByID(@RequestHeader("authToken") UUID id) {
         User user = this.sessionRepository.getReferenceById(id).getUser();
+        return user;
+    }
+    @GetMapping("/client/token")
+    public User getUserByToken(@RequestHeader("authToken") UUID authToken) {
+        User user = this.sessionRepository.findByToken(authToken).getUser();
         return user;
     }
 

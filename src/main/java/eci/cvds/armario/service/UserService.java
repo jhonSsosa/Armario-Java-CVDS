@@ -31,7 +31,7 @@ public class UserService {
 
     public User actualizar(String id, User updatedUser) {
         User user = userRepository.findById(id).get();
-        user.setUserId(updatedUser.getUserId());
+        user.setUserId(updatedUser.getUserId().toString());
         user.setPassword(updatedUser.getPassword());
         user.setRole(updatedUser.getRole());
         user.setUsername(updatedUser.getUsername());

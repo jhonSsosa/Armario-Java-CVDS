@@ -20,9 +20,10 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(basicAuthInterceptor)
                 .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/prendas")
+                .excludePathPatterns("/user/admin/users/**")
                 .addPathPatterns("/login/eliminarSesiones");
     }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/user/**")

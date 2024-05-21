@@ -55,9 +55,9 @@ public class LoginController {
     }
 
     @PostMapping("register")
-    public String registerSubmit(@RequestBody User userSend) {
+    public ResponseEntity<String> registerSubmit(@RequestBody User userSend) {
         userService.adicionar(userSend);
-        return "Usuario creado exitósamente";
+        return new ResponseEntity<>("Usuario registrado correctamente \n"+ userSend, HttpStatus.OK);
     }
 
     @DeleteMapping("/eliminarSesiones")

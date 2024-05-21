@@ -4,5 +4,6 @@ public enum TipoPrenda {
     PANTALON,
     CAMISA,
     ZAPATOS,
-    ACCESORIO
+    ACCESORIO,
+    CHAQUETA
 }

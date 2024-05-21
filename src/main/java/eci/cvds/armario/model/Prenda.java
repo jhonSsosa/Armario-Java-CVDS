@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
@@ -17,21 +18,25 @@ import java.util.UUID;
 public class Prenda {
     @Id
     @Column(name = "prenda_id")
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(generator="uuid2")
+    @GenericGenerator(name="uuid2", strategy = "uuid2")
     private UUID prendaId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @Enumerate(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "tipo")
     private TipoPrenda tipo;
 
-    @Enumerate(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "categoria")
     private CategoriaPrenda categoria;
 
     @Column(name = "image_url_base_64", columnDefinition = "LONGTEXT")
     private String imageUrlBase64;
+
+
+    public Prenda(TipoPrenda tipo, CategoriaPrenda categoria, String imageUrlBase64) {
+        this.tipo = tipo;
+        this.categoria = categoria;
+        this.imageUrlBase64 = imageUrlBase64;
+    }
 }

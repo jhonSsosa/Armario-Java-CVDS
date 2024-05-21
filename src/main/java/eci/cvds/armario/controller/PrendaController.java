@@ -1,16 +1,17 @@
 package eci.cvds.armario.controller;
 
 import eci.cvds.armario.model.Prenda;
-import eci.cvds.armario.model.Session;
 import eci.cvds.armario.model.User;
+import eci.cvds.armario.model.PrendaUsuario;
 import eci.cvds.armario.repository.PrendaRepository;
+import eci.cvds.armario.repository.PrendaUsuarioRepository;
 import eci.cvds.armario.repository.SessionRepository;
-import eci.cvds.armario.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,37 +20,36 @@ import java.util.UUID;
 @RequestMapping(value = "/user")
 public class PrendaController {
     private PrendaRepository prendaRepository;
-
+    private PrendaUsuarioRepository prendaUsuarioRepository;
     private SessionRepository sessionRepository;
 
     @Autowired
-    public PrendaController(PrendaRepository prendaRepository, SessionRepository sessionRepository) {
+    public PrendaController(PrendaRepository prendaRepository, PrendaUsuarioRepository prendaUsuarioRepository, SessionRepository sessionRepository) {
         this.prendaRepository = prendaRepository;
+        this.prendaUsuarioRepository = prendaUsuarioRepository;
         this.sessionRepository = sessionRepository;
     }
 
-    @GetMapping("/client/prendas")
-    public List<Prenda> getAllPrendasOfUser(@RequestHeader("authToken") UUID authToken) {
-        User user = this.sessionRepository.findByToken(authToken).getUser();
-        return prendaRepository.findByUser(user);
+    @GetMapping("/prendas")
+    public List<Prenda> getAllPrendas() {
+        return prendaRepository.findAll();
     }
-
     @GetMapping("/client/prenda/{idPrenda}")
     public ResponseEntity<Prenda> getPrendaById(@RequestHeader("authToken") UUID authToken, @PathVariable("idPrenda") UUID idPrenda) {
         User user = this.sessionRepository.findByToken(authToken).getUser();
         Prenda prenda = prendaRepository.findById(idPrenda).get();
-        if (prenda.getUser() == user) {
+        if (user != null) {
             return new ResponseEntity<>(prenda, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
         }
     }
 
-    @PostMapping("/client/prenda")
+    @PostMapping("/admin/prenda")
     public Prenda addPrenda(@RequestBody Prenda prenda, @RequestHeader("authToken") UUID authToken) {
         User user = this.sessionRepository.findByToken(authToken).getUser();
-        prenda.setUser(user);
-        return prendaRepository.save(prenda);
+        Prenda savedPrenda = prendaRepository.save(prenda);
+        prendaUsuarioRepository.save(new PrendaUsuario(savedPrenda, user));
+        return savedPrenda;
     }
-
 }
