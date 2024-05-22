@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
@@ -16,8 +18,8 @@ import org.hibernate.annotations.GenericGenerator;
 public class User {
     @Id
     @Column(name = "USER_ID")
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private String userId;
 
     @Column(name = "Username")
@@ -25,7 +27,11 @@ public class User {
 
     @Column(name = "Password")
     private String password;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "Role")
     private Roles role;
+
+    public UUID getUserId() {
+        return UUID.fromString(userId);
+    }
 }
