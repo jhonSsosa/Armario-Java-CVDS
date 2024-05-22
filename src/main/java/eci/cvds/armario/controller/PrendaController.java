@@ -34,6 +34,7 @@ public class PrendaController {
     public List<Prenda> getAllPrendas() {
         return prendaRepository.findAll();
     }
+
     @GetMapping("/client/prenda/{idPrenda}")
     public ResponseEntity<Prenda> getPrendaById(@RequestHeader("authToken") UUID authToken, @PathVariable("idPrenda") UUID idPrenda) {
         User user = this.sessionRepository.findByToken(authToken).getUser();
