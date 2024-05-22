@@ -31,8 +31,8 @@ public class UsersController {
     }
 
     @GetMapping("/admin/users")
-    public List<User> getUsers() {
-        return this.userService.getAllUsers();
+    public ResponseEntity<List<User>> getUsers() {
+        return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
     }
 
     @GetMapping("/admin/username/{id}")
