@@ -16,8 +16,8 @@ import org.springframework.http.HttpStatus;
 @CrossOrigin(origins = {"http://localhost:3000", "https://witty-field-0ab72731e.5.azurestaticapps.net"})
 @RequestMapping(value = "/user")
 public class UsersController {
-    private UserService userService;
-    private SessionRepository sessionRepository;
+    private final UserService userService;
+    private final SessionRepository sessionRepository;
 
     @Autowired
     public UsersController(UserService userService, SessionRepository sessionRepository) {
@@ -25,18 +25,13 @@ public class UsersController {
         this.sessionRepository = sessionRepository;
     }
 
-    @GetMapping("")
+    @GetMapping("/admin/greeting")
     public String greeting() {
         return "greeting";
     }
 
     @GetMapping("/admin/users")
-    public ResponseEntity<List<User>> getAllUsers(@RequestBody User userCredentials) {
-            return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
-    }
-
-    @GetMapping("/client/users")
-    public List<User> getAllUsers() {
+    public List<User> getUsers() {
         return this.userService.getAllUsers();
     }
 
