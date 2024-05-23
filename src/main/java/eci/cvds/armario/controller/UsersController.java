@@ -47,14 +47,12 @@ public class UsersController {
 
     @GetMapping("/client/token")
     public User getUserByToken(@RequestHeader("authToken") UUID authToken) {
-        User user = this.sessionRepository.findByToken(authToken).getUser();
-        return user;
+        return this.sessionRepository.findByToken(authToken).getUser();
     }
 
     @GetMapping("/admin/token")
     public User getUserByTokenAdmin(@RequestHeader("authToken") UUID authToken) {
-        User user = this.sessionRepository.findByToken(authToken).getUser();
-        return user;
+        return this.sessionRepository.findByToken(authToken).getUser();
     }
 
     @PostMapping("/admin/adicionarUsuario")
