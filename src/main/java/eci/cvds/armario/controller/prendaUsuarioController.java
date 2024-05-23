@@ -41,10 +41,17 @@ public class prendaUsuarioController {
         }
     }
     @PostMapping("/client/UsuarioPrenda")
-    public PrendaUsuario addPrenda(@RequestBody PrendaUsuario prendaUser, @RequestHeader("authToken") UUID authToken) {
+    public ResponseEntity<PrendaUsuario> addPrenda(@RequestBody PrendaUsuario prendaUser, @RequestHeader("authToken") UUID authToken) {
         User user = this.sessionRepository.findByToken(authToken).getUser();
-        return prendaUsuarioRepository.save(prendaUser);
+        if (user != null) {
+            prendaUser.setUser(user); // Asigna el usuario autenticado a la prenda
+            PrendaUsuario savedPrendaUser = prendaUsuarioRepository.save(prendaUser);
+            return new ResponseEntity<>(savedPrendaUser, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        }
     }
+
     @DeleteMapping("/client/UsuarioPrenda/{idPrenda}")
     public ResponseEntity<String> deletePrenda(@RequestHeader("authToken") UUID authToken, @PathVariable("idPrenda") UUID idPrenda) {
         User user = this.sessionRepository.findByToken(authToken).getUser();
