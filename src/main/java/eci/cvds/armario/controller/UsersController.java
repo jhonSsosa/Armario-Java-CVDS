@@ -42,8 +42,7 @@ public class UsersController {
 
     @GetMapping("/client/userId")
     public User getUserByID(@RequestHeader("authToken") UUID id) {
-        User user = this.sessionRepository.getReferenceById(id).getUser();
-        return user;
+        return this.sessionRepository.getReferenceById(id).getUser();
     }
 
     @GetMapping("/client/token")
