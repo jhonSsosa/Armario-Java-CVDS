@@ -50,6 +50,7 @@ public class PrendaController {
     public Prenda addPrenda(@RequestBody Prenda prenda, @RequestHeader("authToken") UUID authToken) {
         User user = this.sessionRepository.findByToken(authToken).getUser();
         Prenda savedPrenda = prendaRepository.save(prenda);
+        System.out.println(savedPrenda.getPrendaId());
         prendaUsuarioRepository.save(new PrendaUsuario(savedPrenda, user));
         return savedPrenda;
     }

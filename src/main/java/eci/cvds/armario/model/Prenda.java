@@ -18,8 +18,8 @@ import java.util.UUID;
 public class Prenda {
     @Id
     @Column(name = "prenda_id")
-    @GeneratedValue(generator="uuid2")
-    @GenericGenerator(name="uuid2", strategy = "uuid2")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private UUID prendaId;
 
     @Enumerated(EnumType.STRING)
@@ -33,10 +33,4 @@ public class Prenda {
     @Column(name = "image_url_base_64", columnDefinition = "LONGTEXT")
     private String imageUrlBase64;
 
-
-    public Prenda(TipoPrenda tipo, CategoriaPrenda categoria, String imageUrlBase64) {
-        this.tipo = tipo;
-        this.categoria = categoria;
-        this.imageUrlBase64 = imageUrlBase64;
-    }
 }

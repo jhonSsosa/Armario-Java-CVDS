@@ -24,11 +24,11 @@ public class PrendaUsuario {
     private UUID Id;
 
     @ManyToOne
-    @JoinColumn(name = "prenda_id")
+    @JoinColumn(name = "prenda_id", nullable = false)
     private Prenda prenda;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
     public PrendaUsuario(Prenda prenda, User user) {
         this.prenda = prenda;
