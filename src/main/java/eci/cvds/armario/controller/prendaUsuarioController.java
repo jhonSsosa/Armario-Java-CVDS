@@ -7,6 +7,7 @@ import eci.cvds.armario.repository.SessionRepository;
 import eci.cvds.armario.repository.PrendaUsuarioRepository;
 import eci.cvds.armario.repository.PrendaRepository;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import java.util.List;
@@ -42,13 +43,18 @@ public class prendaUsuarioController {
     }
     @PostMapping("/client/UsuarioPrenda")
     public ResponseEntity<PrendaUsuario> addPrenda(@RequestBody PrendaUsuario prendaUser, @RequestHeader("authToken") UUID authToken) {
-        User user = this.sessionRepository.findByToken(authToken).getUser();
-        if (user != null) {
-            prendaUser.setUser(user); // Asigna el usuario autenticado a la prenda
-            PrendaUsuario savedPrendaUser = prendaUsuarioRepository.save(prendaUser);
-            return new ResponseEntity<>(savedPrendaUser, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        try {
+            User user = this.sessionRepository.findByToken(authToken).getUser();
+            if (user != null) {
+                prendaUser.setUser(user);
+                PrendaUsuario savedPrendaUser = prendaUsuarioRepository.save(prendaUser);
+                return new ResponseEntity<>(savedPrendaUser, HttpStatus.CREATED);
+            } else {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authorized");
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Para depuración, puedes eliminar esto en producción
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e);
         }
     }
 
