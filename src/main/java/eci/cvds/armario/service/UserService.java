@@ -42,11 +42,12 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public User getUserById(String id) {
-        if (!userRepository.findById(id).isEmpty())
-            return userRepository.findById(id).get();
+    public User getUserById(String id) throws Exception {
+        Optional<User> user = userRepository.findById(id);
+        if (!user.isEmpty())
+            return user.get();
         else{
-            return null;
+            throw new ClassNotFoundException();
         }
     }
 

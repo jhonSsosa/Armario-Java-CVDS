@@ -37,7 +37,11 @@ public class UsersController {
 
     @GetMapping("/admin/username/{id}")
     public User getUserByUsername(@PathVariable("id") String id) {
-        return this.userService.getUserById(id);
+        try{
+            return this.userService.getUserById(id);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     @GetMapping("/client/userId")
