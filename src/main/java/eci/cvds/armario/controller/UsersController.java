@@ -57,7 +57,7 @@ public class UsersController {
         userService.adicionar(user);
     }
 
-    @PostMapping("/admin/actualizarUsuario/{id}")
+    @PutMapping("/admin/actualizarUsuario/{id}")
     public User actualizar(@PathVariable String id, @RequestBody User user) {
         return userService.actualizar(id, user);
     }

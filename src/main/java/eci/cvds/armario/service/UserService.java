@@ -43,7 +43,7 @@ public class UserService {
     }
 
     public User getUserById(String id) {
-        return userRepository.getReferenceById(id);
+        return userRepository.findById(id).get();
     }
 
 
