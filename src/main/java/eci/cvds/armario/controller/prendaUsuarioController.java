@@ -1,5 +1,8 @@
 package eci.cvds.armario.controller;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import eci.cvds.armario.model.PrendaUsuario;
 import eci.cvds.armario.model.User;
 import eci.cvds.armario.model.Prenda;
@@ -11,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "https://witty-field-0ab72731e.5.azurestaticapps.net"})
 @RequestMapping(value = "/user")
@@ -25,9 +29,10 @@ public class prendaUsuarioController {
     }
 
     @GetMapping("/client/UsuarioPrendas")
-    public List<PrendaUsuario> getAllPrendasOfUser(@RequestHeader("authToken") UUID authToken) {
+    public List<Prenda> getAllPrendasOfUser(@RequestHeader("authToken") UUID authToken) {
         User user = this.sessionRepository.findByToken(authToken).getUser();
-        return prendaUsuarioRepository.findByUser(user);
+        List<PrendaUsuario> prendaUsuarios = prendaUsuarioRepository.findByUser(user);
+        return prendaUsuarios.stream().map(PrendaUsuario::getPrenda).collect(Collectors.toList());
     }
     @GetMapping("/client/UsuarioPrenda/{idPrenda}")
     public ResponseEntity<PrendaUsuario> getPrendaById(@RequestHeader("authToken") UUID authToken, @PathVariable("idPrenda") UUID idPrenda) {
