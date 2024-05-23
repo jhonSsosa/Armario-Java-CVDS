@@ -1,8 +1,5 @@
 package eci.cvds.armario.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import eci.cvds.armario.model.PrendaUsuario;
 import eci.cvds.armario.model.User;
 import eci.cvds.armario.model.Prenda;
@@ -47,6 +44,18 @@ public class prendaUsuarioController {
     public PrendaUsuario addPrenda(@RequestBody PrendaUsuario prendaUser, @RequestHeader("authToken") UUID authToken) {
         User user = this.sessionRepository.findByToken(authToken).getUser();
         return prendaUsuarioRepository.save(prendaUser);
+    }
+    @DeleteMapping("/client/UsuarioPrenda/{idPrenda}")
+    public ResponseEntity<String> deletePrenda(@RequestHeader("authToken") UUID authToken, @PathVariable("idPrenda") UUID idPrenda) {
+        User user = this.sessionRepository.findByToken(authToken).getUser();
+        Prenda prenda = prendaRepository.findByPrendaId(idPrenda);
+        PrendaUsuario prendaUsuario = prendaUsuarioRepository.findByPrenda(prenda);
+        if (user != null && prendaUsuario != null && prendaUsuario.getUser().equals(user)) {
+            prendaUsuarioRepository.delete(prendaUsuario);
+            return new ResponseEntity<>("Prenda eliminada correctamente", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No autorizado o prenda no encontrada", HttpStatus.FORBIDDEN);
+        }
     }
 
 }

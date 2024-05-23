@@ -54,4 +54,22 @@ public class PrendaController {
         prendaUsuarioRepository.save(new PrendaUsuario(savedPrenda, user));
         return savedPrenda;
     }
+    @DeleteMapping("/admin/prenda/{idPrenda}")
+    public ResponseEntity<String> deletePrenda(@RequestHeader("authToken") UUID authToken, @PathVariable("idPrenda") UUID idPrenda) {
+        User user = this.sessionRepository.findByToken(authToken).getUser();
+        if (user != null) {
+            Prenda prenda = prendaRepository.findById(idPrenda).orElse(null);
+            if (prenda != null) {
+                PrendaUsuario prendaUsuario = prendaUsuarioRepository.findByPrenda(prenda);
+                prendaUsuarioRepository.delete(prendaUsuario);
+                prendaRepository.delete(prenda);
+                return new ResponseEntity<>("Prenda eliminada correctamente", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("La prenda no existe", HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>("No autorizado", HttpStatus.FORBIDDEN);
+        }
+    }
 }
+
