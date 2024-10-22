@@ -47,7 +47,6 @@ public class PrendaUsuarioController {
     }
     @PostMapping("/client/UsuarioPrenda")
     public PrendaUsuario addPrenda(@RequestBody PrendaUsuario prendaUser, @RequestHeader("authToken") UUID authToken) {
-        User user = this.sessionRepository.findByToken(authToken).getUser();
         return prendaUsuarioRepository.save(prendaUser);
     }
     @DeleteMapping("/client/UsuarioPrenda/{idPrenda}")
