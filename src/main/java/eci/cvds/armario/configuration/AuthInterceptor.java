@@ -43,12 +43,10 @@ public class AuthInterceptor implements HandlerInterceptor {
                     sessionRepository.delete(session);
                     response.sendError(HttpServletResponse.SC_EXPECTATION_FAILED, "SessionTimeout");
                     return false;
-                } else if ((path.startsWith("/user/admin") || path.startsWith("/login/eliminarSesiones")) && session.getUser().getRole().equals(Roles.ADMINISTRADOR)) {
-                    response.setHeader("Access-Control-Allow-Credentials", "true");
-                    return true;
-                } else if (path.startsWith("/user/client") && session.getUser().getRole().equals(Roles.CLIENTE)) {
-                    response.setHeader("Access-Control-Allow-Credentials", "true");
-                    return true;
+                } else if ((path.startsWith("/user/admin") || path.startsWith("/login/eliminarSesiones") && session.getUser().getRole().equals(Roles.ADMINISTRADOR)) ||
+                (path.startsWith("/user/client") && session.getUser().getRole().equals(Roles.CLIENTE))) {
+                response.setHeader("Access-Control-Allow-Credentials", "true");
+                return true;
                 } else {
                     response.sendError(HttpServletResponse.SC_EXPECTATION_FAILED, "Route does not found");
                     return false;
