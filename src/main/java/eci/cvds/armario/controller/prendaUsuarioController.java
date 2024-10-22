@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000", "https://witty-field-0ab72731e.5.azurestaticapps.net"})
 @RequestMapping(value = "/user")
-public class prendaUsuarioController {
+public class PrendaUsuarioController {
     private SessionRepository sessionRepository;
     private PrendaUsuarioRepository prendaUsuarioRepository;
     private PrendaRepository prendaRepository;
 
-    public prendaUsuarioController(SessionRepository sessionRepository, PrendaUsuarioRepository prendaUsuarioRepository) {
+    public PrendaUsuarioController(SessionRepository sessionRepository, PrendaUsuarioRepository prendaUsuarioRepository) {
         this.sessionRepository = sessionRepository;
         this.prendaUsuarioRepository = prendaUsuarioRepository;
     }
