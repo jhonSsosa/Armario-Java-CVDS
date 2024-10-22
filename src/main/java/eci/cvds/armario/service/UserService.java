@@ -42,7 +42,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    public User getUserById(String id) throws Exception {
+    public User getUserById(String id) throws ClassNotFoundException {
         Optional<User> user = userRepository.findById(id);
         if (!user.isEmpty())
             return user.get();
