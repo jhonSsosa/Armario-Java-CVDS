@@ -21,13 +21,13 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public boolean validarUsuario(User LogInUser) {
-        if (userRepository.findByUsername(LogInUser.getUsername()) == null) {
+    public boolean validarUsuario(User logInUser) {
+        if (userRepository.findByUsername(logInUser.getUsername()) == null) {
             return false;
         }
-        User user = userRepository.findByUsername(LogInUser.getUsername());
-        return user.getUsername().equals(LogInUser.getUsername()) &&
-                user.getPassword().equals(LogInUser.getPassword());
+        User user = userRepository.findByUsername(logInUser.getUsername());
+        return user.getUsername().equals(logInUser.getUsername()) &&
+                user.getPassword().equals(logInUser.getPassword());
     }
 
     public User actualizar(String id, User updatedUser) {
