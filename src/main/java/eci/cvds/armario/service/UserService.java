@@ -1,16 +1,20 @@
 package eci.cvds.armario.service;
 
-import eci.cvds.armario.repository.UserRepository;
-import eci.cvds.armario.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import eci.cvds.armario.model.User;
+import eci.cvds.armario.repository.UserRepository;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -22,17 +26,19 @@ public class UserService {
     }
 
     public boolean validarUsuario(User logInUser) {
-        if (userRepository.findByUsername(logInUser.getUsername()) == null) {
+        User user = userRepository.findByUsername(logInUser.getUsername());
+        if (user == null) {
             return false;
         }
-        User user = userRepository.findByUsername(logInUser.getUsername());
+
+        // Usar BCrypt para comparar las contraseñas
         return user.getUsername().equals(logInUser.getUsername()) &&
-                user.getPassword().equals(logInUser.getPassword());
+               passwordEncoder.matches(logInUser.getPassword(), user.getPassword());
     }
 
     public User actualizar(String id, User updatedUser) {
         User user = userRepository.findById(id).get();
-        user.setPassword(updatedUser.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(updatedUser.getRole());
         user.setUsername(updatedUser.getUsername());
         return userRepository.save(user);
